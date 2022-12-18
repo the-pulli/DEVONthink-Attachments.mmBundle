@@ -1,0 +1,24 @@
+{
+	name          = 'Add...';
+	input         = 'raw';
+    inputFilesPattern = '';
+    environment = 'MM_MESSAGE_ID=${message-id.split}\n';
+	command       = '#!/usr/bin/env bash
+
+set -e
+
+RUBY_INTERPRETER=ruby
+if [[ -f $HOME/.asdf/shims/ruby ]]
+then
+    RUBY_INTERPRETER=$HOME/.asdf/shims/ruby
+elif [[ -f $HOME/.rbenv/shims/ruby ]]
+then
+    RUBY_INTERPRETER=$HOME/.rbenv/shims/ruby
+elif [[ -f $HOME/.rvmrc ]]
+then
+    RUBY_INTERPRETER=$HOME/.rvmrc
+fi
+$RUBY_INTERPRETER "${MM_BUNDLE_SUPPORT}/bin/add.rb"';
+	keyEquivalent = "^A";
+	uuid          = '02ADC531-BDF0-48F9-A56E-E10298C83614';
+}

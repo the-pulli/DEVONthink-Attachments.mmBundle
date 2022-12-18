@@ -1,0 +1,12 @@
+{
+	name          = 'Attachment Rules...';
+	input         = 'none';
+  executionMode = 'noMessages';
+	command       = '#!/usr/bin/env bash
+
+set -e
+
+open "${MM_BUNDLE_SUPPORT}/bin/rule.rb"';
+	keyEquivalent = "^R";
+	uuid          = 'F9674064-5F51-47ED-83D8-9C4DEC9F7FFB';
+}

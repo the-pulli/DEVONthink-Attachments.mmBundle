@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contactEmailRot13</key>
+	<string>gur@chyyv.qri</string>
+	<key>contactName</key>
+	<string>PuLLi</string>
+	<key>description</key>
+	<string>Archive mail attachments in DEVONthink Pro.</string>
+	<key>name</key>
+	<string>DEVONthink Pro Attachments</string>
+	<key>uuid</key>
+	<string>750AE193-9117-4865-848E-68036BF918A2</string>
+</dict>
+</plist>
