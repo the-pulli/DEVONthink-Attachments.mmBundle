@@ -1,5 +1,8 @@
-require 'date'
-require 'json'
+# frozen_string_literal: true
+
+require "date"
+require "json"
+require_relative "rule"
 
 module DEVONthink
   # Handles adding files to DT
@@ -11,22 +14,42 @@ module DEVONthink
     def add
       # Convert Ruby Array with Hashes to an AppleScript Record String for the given files
       substitution = {
-        '[' => '{',
-        ']' => '}',
-        '=>' => ':',
-        ', ' => ',',
-        ':' => ''
+        "[" => "{",
+        "]" => "}",
+        "=>" => ":",
+        ", " => ",",
+        ":" => ""
       }
 
       attachments_record = @attachments.to_s.gsub(/[\[\]=>:\\]*(, )*/, substitution)
                                        .gsub(/"(filepath|filename)"/, '\1')
 
       url = @attachments.first[:url]
-      date = Date.new.strftime('%Y-%m-%d')
+      date = Date.new.strftime("%Y-%m-%d")
 
       # Use AppleScript to communicate with DEVONthink
       apple_script = <<~APS.strip
         use scripting additions
+
+        on cleanDuplicateRecord(theRecord)
+          tell application id "DNtp"
+            set theDuplicates to duplicates of theRecord
+            set deleteDuplicateRecord to #{Rule::DELETE_DUPLICATE_RECORD}
+            set moveToTrash to #{Rule::MOVE_TO_TRASH}
+            set isDeleted to false
+            if deleteDuplicateRecord then
+              if (length of theDuplicates is greater than 0) then
+                if moveToTrash then
+                  move record theRecord to (trash group of database of theRecord)
+                else
+                  delete record theRecord
+                end if
+                set isDeleted to true
+              end if
+            end if
+          end tell
+          return isDeleted
+        end cleanDuplicateRecord
 
         try
             tell application id "DNtp"
@@ -57,9 +80,13 @@ module DEVONthink
                         set modification date of ocrRecord to theModificationDate
                         set the URL of ocrRecord to "#{url}" # Allows it to be opened in MailMate using ⌃⌘U
                         set theResult to delete record theRecord
+                        my cleanDuplicateRecord(ocrRecord)
                       end if
 
-                      display notification (fileName of theAttachment) & " imported." with title "MailMate"
+                      set wasDeleted to my cleanDuplicateRecord(theRecord)
+                      if wasDeleted is false then
+                        display notification (fileName of theAttachment) & " imported." with title "MailMate"
+                      end if
                     else
                       display notification "File could not be imported." with title "MailMate"
                     end if
