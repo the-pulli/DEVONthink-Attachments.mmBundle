@@ -55,16 +55,8 @@ try
 
               set the URL of theRecord to "DEVONTHINK_URL" # Allows it to be opened in MailMate using ⌃⌘U
 
-              try
-                # Shell script hack from Jim N. (DEVONtechnologies)
-                do shell script "tail -n 5 " & (quoted form of (path of theRecord as string)) & " | grep Encrypt"
-                set theEncryption to true
-              on error
-                set theEncryption to false
-              end try
-
-              if (type of theRecord is PDF document) and (word count of theRecord is 0) and (theEncryption is false) then
-                set ocrRecord to (ocr file path of theRecord) waiting for reply true
+              if ((type of theRecord) is PDF document) and ((word count of theRecord) is 0) and ((encrypted of theRecord) is false) then
+                set ocrRecord to (ocr file path of theRecord waiting for reply true)
                 set modification date of ocrRecord to theModificationDate
                 set the URL of ocrRecord to "DEVONTHINK_URL" # Allows it to be opened in MailMate using ⌃⌘U
                 set theResult to delete record theRecord
