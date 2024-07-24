@@ -6,7 +6,18 @@
 
 set -e
 
-open "${MM_BUNDLE_SUPPORT}/bin/rule.rb"';
+RUBY_INTERPRETER=ruby
+if [[ -f $HOME/.asdf/shims/ruby ]]
+then
+    RUBY_INTERPRETER=$HOME/.asdf/shims/ruby
+elif [[ -f $HOME/.rbenv/shims/ruby ]]
+then
+    RUBY_INTERPRETER=$HOME/.rbenv/shims/ruby
+elif [[ -f $HOME/.rvmrc ]]
+then
+    RUBY_INTERPRETER=$HOME/.rvmrc
+fi
+$RUBY_INTERPRETER "${MM_BUNDLE_SUPPORT}/bin/check_rule.rb"';
 	keyEquivalent = "^R";
 	uuid          = 'F9674064-5F51-47ED-83D8-9C4DEC9F7FFB';
 }
