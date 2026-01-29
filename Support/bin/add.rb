@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "cgi"
-require "json"
-require_relative "files"
-require_relative "rule"
+require_relative "devonthink"
 
-url = "message://%3c#{CGI.escape(ENV.fetch('MM_MESSAGE_ID'))}%3e"
+config = DEVONthink.load_config
+attachments = DEVONthink.parse_attachments(ENV.fetch("MM_FILES"), ENV.fetch("MM_MESSAGE_ID"))
+attachments = DEVONthink.apply_rules(attachments, config[:rules])
 
-attachments = JSON.parse(ENV.fetch("MM_FILES"), { symbolize_names: true }).map do |f|
-  { filepath: f[:filePath], filename: File.basename(f[:filePath]), mime: f[:MIME], url: url }
-end
+exit 0 if attachments.empty?
 
-DEVONthink::Files.new(DEVONthink::Rule.new(attachments).apply).add
+attachments = DEVONthink.transform_for_applescript(attachments)
+substitutions = DEVONthink.build_substitutions(attachments, config)
+apple_script = DEVONthink.build_applescript(substitutions)
+
+exec "osascript", "-e", apple_script

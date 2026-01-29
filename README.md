@@ -4,14 +4,36 @@ This bundle enhances MailMate to add attachments to DEVONthink (via AppleScript)
 
 ## Installation
 
-The bundle requires a recent version of Ruby installed. The bundle should be placed in `~/Library/Application Support/MailMate/Bundles`.
-For the main command, it checks for Ruby environment managers like asdf, rbenv and rvm.
+Place the bundle in `~/Library/Application Support/MailMate/Bundles`. Requires Ruby 2.4+ (macOS includes Ruby 2.6).
 
 ## Usage
 
-It consists two commands, `Add...` and `Attachments Rules...`. The first one adds the attachments via AppleScript to DEVONthink.
-The second one opens the Ruby class file, which consists the rules for adding filenames and mime types.
-To automate adding attachments from MailMate to DEVONthink you can add a MailMate rule for your inbox to execute the Plugins `Add...` command.
+Two commands are available:
+
+- **Add...** (Ctrl+A) - Adds attachments to DEVONthink
+- **Attachment Rules...** (Ctrl+R) - Opens your custom rules file
+
+To automate, add a MailMate rule for your inbox to execute the `Add...` command.
+
+## Configuration
+
+Your custom rules are stored **outside the bundle** at:
+```
+~/Library/Application Support/MailMate/DEVONthink Attachments Config/rules.rb
+```
+
+This means you can update the bundle without losing your settings. The config file is created automatically when you first run "Attachment Rules...".
+
+Example config (only include what you want to override):
+```ruby
+{
+  rules: {
+    filename_reject!: /my-custom-pattern|unwanted/i,
+  },
+  delete_duplicate_record: true,
+  move_to_trash: false,
+}
+```
 
 ## License
 
