@@ -46,6 +46,8 @@ MailMate (Ctrl+A) → add.rb → load config → parse attachments → apply rul
 ruby test/devonthink_test.rb
 ```
 
+CI runs automatically on push/PR to main via GitHub Actions (`.github/workflows/test.yml`).
+
 ## Ruby Requirements
 
 - Minimum version: **Ruby 2.4** (uses `match?`)
