@@ -1,11 +1,13 @@
 # Upgrade Guide
 
-## Upgrading from 0.2.0 to 0.3.0
+Maintainer: PuLLi
+
+## Upgrading from 0.2.0 to v1.0.0
 
 ### What Changed
 
-| 0.2.0 | 0.3.0 |
-|-------|-------|
+| 0.2.0 | v1.0.0 |
+|-------|--------|
 | Custom rules in `Support/bin/rule.rb` inside bundle | Custom rules in `~/Library/Application Support/MailMate/DEVONthink Attachments Config/rules.rb` |
 | Ruby class with constants | Simple Ruby hash |
 | Edit bundle files directly | Bundle can be replaced without losing config |
@@ -40,7 +42,7 @@
 4. **Convert your customizations** to the new format:
 
    ```ruby
-   # New format (0.3.0) - only include what you changed
+   # New format (v1.0.0) - only include what you changed
    {
      rules: {
        filename_reject!: /your-custom-pattern/i,
@@ -79,7 +81,7 @@ module DEVONthink
 end
 ```
 
-**New (0.3.0):**
+**New (v1.0.0):**
 ```ruby
 {
   rules: {
@@ -90,7 +92,7 @@ end
 }
 ```
 
-### Benefits of 0.3.0
+### Benefits of v1.0.0
 
 - **Update-safe**: Config lives outside bundle, never lost on update
 - **Simpler config**: Just a hash, no Ruby classes needed
