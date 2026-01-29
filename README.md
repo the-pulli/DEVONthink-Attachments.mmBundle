@@ -1,7 +1,5 @@
 # About DEVONthink-Attachments Bundle
 
-Maintainer: PuLLi
-
 This bundle enhances MailMate to add attachments to DEVONthink (via AppleScript).
 
 ## Installation
@@ -40,6 +38,10 @@ Example config (only include what you want to override):
 ## Upgrading
 
 If upgrading from 0.2.0 or earlier, see [UPGRADE.md](UPGRADE.md) for migration instructions.
+
+## Maintainer
+
+[PuLLi](https://github.com/the-pulli)
 
 ## License
 
