@@ -2,7 +2,6 @@
 
 require "cgi"
 require "json"
-require "date"
 
 module DEVONthink
   DEFAULTS = {
@@ -67,7 +66,6 @@ module DEVONthink
 
     def build_substitutions(attachments, config)
       {
-        "DEVONTHINK_DATE" => Date.today.strftime("%Y-%m-%d"),
         "DEVONTHINK_DELETE_DUPLICATE_RECORD" => config[:delete_duplicate_record].to_s,
         "DEVONTHINK_JSON" => JSON.generate(attachments).inspect,
         "DEVONTHINK_MOVE_TO_TRASH" => config[:move_to_trash].to_s,

@@ -114,7 +114,6 @@ class DEVONthinkTest < Minitest::Test
     assert_equal "true", result["DEVONTHINK_DELETE_DUPLICATE_RECORD"]
     assert_equal "false", result["DEVONTHINK_MOVE_TO_TRASH"]
     assert_equal "message://test123", result["DEVONTHINK_URL"]
-    assert_match(/\d{4}-\d{2}-\d{2}/, result["DEVONTHINK_DATE"])
     assert_includes result["DEVONTHINK_JSON"], "message://test123"
   end
 

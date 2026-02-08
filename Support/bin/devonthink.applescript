@@ -39,16 +39,19 @@ on cleanDuplicateRecord(theRecord)
 end cleanDuplicateRecord
 
 try
+    set currentStep to "parsing attachments"
     tell application id "DNtp"
         set theAttachments to my parseJSON(DEVONTHINK_JSON)
         repeat with theAttachment in theAttachments
+            set currentStep to "importing " & (devonthinkFilename of theAttachment)
             set theRecord to import (devonthinkFilepath of theAttachment)
 
             if theRecord is not missing value then
+              set currentStep to "setting dates for " & (devonthinkFilename of theAttachment)
               if (creation date of theRecord) is not missing value then
                 set theModificationDate to creation date of theRecord
               else
-                set theModificationDate to "DEVONTHINK_DATE"
+                set theModificationDate to current date
               end if
 
               set modification date of theRecord to theModificationDate
@@ -57,17 +60,23 @@ try
 
               set needsDuplicateCleanup to true
               if ((type of theRecord) is PDF document) and ((word count of theRecord) is 0) and ((encrypted of theRecord) is false) then
+                set currentStep to "OCR for " & (devonthinkFilename of theAttachment)
                 set ocrRecord to (ocr file path of theRecord waiting for reply true)
-                set (modification date of ocrRecord) to theModificationDate
-                set (creation date of ocrRecord) to theModificationDate
-                set the URL of ocrRecord to "DEVONTHINK_URL" # Allows it to be opened in MailMate using ⌃⌘U
-                set theResult to delete record theRecord
-                my cleanDuplicateRecord(ocrRecord)
-                set needsDuplicateCleanup to false
+                if ocrRecord is not missing value then
+                  set (modification date of ocrRecord) to theModificationDate
+                  set (creation date of ocrRecord) to theModificationDate
+                  set the URL of ocrRecord to "DEVONTHINK_URL" # Allows it to be opened in MailMate using ⌃⌘U
+                  delete record theRecord
+                  my cleanDuplicateRecord(ocrRecord)
+                  set needsDuplicateCleanup to false
+                else
+                  display notification "OCR failed for " & (devonthinkFilename of theAttachment) & ", keeping original." with title "MailMate"
+                end if
               end if
 
               set wasDeleted to false
               if needsDuplicateCleanup then
+                set currentStep to "checking duplicates for " & (devonthinkFilename of theAttachment)
                 set wasDeleted to my cleanDuplicateRecord(theRecord)
               end if
 
@@ -82,6 +91,6 @@ try
 on error errMsg number eNum
     tell application "System Events"
         activate
-        display alert "DEVONthink: " & eNum message errMsg
+        display alert "DEVONthink: " & eNum message "Step: " & currentStep & return & return & errMsg
     end tell
 end try
