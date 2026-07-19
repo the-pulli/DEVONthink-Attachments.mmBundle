@@ -8,12 +8,23 @@ Place the bundle in `~/Library/Application Support/MailMate/Bundles`. Requires R
 
 ## Usage
 
-Two commands are available:
+Three commands are available:
 
 - **Add...** (Ctrl+A) - Adds attachments to DEVONthink
 - **Attachment Rules...** (Ctrl+R) - Opens your custom rules file
+- **Check for Updates...** (Ctrl+U) - Checks GitHub for a newer release and updates the bundle in place
 
 To automate, add a MailMate rule for your inbox to execute the `Add...` command.
+
+## Updating
+
+Run **Check for Updates...** (Ctrl+U). It compares the installed version (from
+`info.plist`) with the latest [GitHub release](https://github.com/the-pulli/DEVONthink-Attachments.mmBundle/releases).
+If a newer release exists, it shows the release notes in a dialog and — after you
+click **Update** — downloads and installs it over the bundle. It then offers to
+**Restart** MailMate for you (a detached helper quits MailMate and relaunches it
+once it has fully closed); choose **Later** to restart manually instead. Your
+rules file lives outside the bundle and is never touched.
 
 ## Configuration
 

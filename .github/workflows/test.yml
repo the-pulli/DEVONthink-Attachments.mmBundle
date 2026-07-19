@@ -17,4 +17,8 @@ jobs:
         run: ruby --version
 
       - name: Run tests
-        run: ruby test/devonthink_test.rb
+        run: |
+          for f in test/*_test.rb; do
+            echo "== $f =="
+            ruby "$f"
+          done

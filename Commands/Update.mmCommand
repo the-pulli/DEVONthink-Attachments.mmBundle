@@ -1,0 +1,10 @@
+{
+	name          = 'Check for Updates...';
+	input         = 'none';
+  executionMode = 'noMessages';
+	command       = '#!/usr/bin/env bash
+set -e
+/usr/bin/env ruby "${MM_BUNDLE_SUPPORT}/bin/update.rb"';
+	keyEquivalent = "^U";
+	uuid          = '6C51E3B7-2F0A-4D9E-9C2B-8A1F5D3E4B70';
+}

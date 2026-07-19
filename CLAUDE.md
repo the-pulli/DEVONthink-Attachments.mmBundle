@@ -9,15 +9,17 @@ This is a **MailMate bundle** that automates archiving email attachments to DEVO
 ## Architecture
 
 ```
-Commands/           → MailMate command definitions (Ctrl+A to add, Ctrl+R for rules)
+Commands/           → MailMate command definitions (Ctrl+A add, Ctrl+R rules, Ctrl+U update)
 Support/bin/        → Core logic
   add.rb            → Entry point: orchestrates the flow
   devonthink.rb     → DEVONthink module with all business logic
   config_template.rb → Template for new user config files
   open_rules.rb     → Creates config dir if needed, opens user's rules.rb
+  update.rb         → Self-updater: checks GitHub release, confirms, replaces bundle
   devonthink.applescript → AppleScript that communicates with DEVONthink
 test/               → Tests
   devonthink_test.rb → Minitest tests for DEVONthink module
+  update_test.rb     → Minitest tests for the updater's version logic
 ```
 
 ### User Config Location (outside bundle)
@@ -70,6 +72,9 @@ CI runs automatically on push/PR to main via GitHub Actions (`.github/workflows/
 ## Important Notes
 
 - **MailMate commands require bash shebang**: Commands must start with `#!/usr/bin/env bash` - MailMate won't execute single-line commands without it
+- **Version lives in `info.plist`** (`<key>version</key>`). `update.rb` reads it to compare against the latest GitHub *release* (not tag). **When cutting a release, bump this key** so installed bundles detect the update — a git tag alone is not enough; a GitHub Release must exist. A missing/unreadable key (pre-versioning bundle) is treated as stale, so the update is offered rather than silently skipped; `update.rb` and the key first ship together, so a normal upgrade path never lacks it.
+- **Updater uses `curl`** (system binary, handles TLS/redirects/proxies) rather than Ruby's `net/http`, and copies the release tarball over the bundle while skipping `.git`, `.idea`, `.claude`.
+- **Auto-restart is decoupled**: the command runs as a child of MailMate, so quitting inline would kill it mid-flight. `relaunch_mailmate` spawns a **detached** watcher (own process group, IO to `/dev/null`) that polls `pgrep -x MailMate` until MailMate exits, then `open -a MailMate` — only afterwards does it tell MailMate to quit.
 - AppleScript escaping: Uses `.inspect` on JSON to escape quotes
 - OCR: Triggers only on blank PDFs (0 word count) and non-encrypted records
 - Duplicates: Controlled by `delete_duplicate_record` and `move_to_trash` in user config

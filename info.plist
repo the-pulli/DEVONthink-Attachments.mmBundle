@@ -12,5 +12,7 @@
 	<string>DEVONthink Attachments</string>
 	<key>uuid</key>
 	<string>750AE193-9117-4865-848E-68036BF918A2</string>
+	<key>version</key>
+	<string>1.2.0</string>
 </dict>
 </plist>
